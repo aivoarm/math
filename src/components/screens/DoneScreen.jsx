@@ -8,6 +8,7 @@ export const DoneScreen = () => {
   const t = translations[lang];
   const totalQuestions = currentTopic.problems.length;
   const percentage = Math.round((sessionScore / totalQuestions) * 100);
+  const isPerfect = sessionScore === totalQuestions;
 
   return (
     <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1.5rem', margin: 'auto 0' }}>
@@ -21,29 +22,35 @@ export const DoneScreen = () => {
           {lang === 'fr' ? currentTopic.meta.titleFr : currentTopic.meta.titleEn}
         </p>
 
-        {/* Snack Reward Coupon */}
-        <div 
-          style={{ 
-            background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 0, 122, 0.2) 100%)', 
-            border: '2px dashed var(--kpop-gold)', 
-            borderRadius: 'var(--radius)', 
-            padding: '1.2rem', 
-            marginBottom: '1.5rem',
-            boxShadow: '0 0 15px var(--kpop-gold-glow)'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '0.4rem' }}>
-            <Gift size={22} color="var(--kpop-gold)" className="animate-bounce" />
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--kpop-gold)' }}>
-              {lang === 'fr' ? '🍿 COUPON RÉCOMPENSE SNACK ! 🧋' : '🍿 PARENT SNACK COUPON REWARD! 🧋'}
-            </h3>
+        {/* Snack Reward Coupon - Only unlocked if 0 mistakes */}
+        {isPerfect ? (
+          <div 
+            style={{ 
+              background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 107, 0, 0.25) 100%)', 
+              border: '2px dashed var(--naruto-yellow)', 
+              borderRadius: 'var(--radius)', 
+              padding: '1.2rem', 
+              marginBottom: '1.5rem',
+              boxShadow: '0 0 15px var(--naruto-yellow-glow)'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '0.4rem' }}>
+              <Gift size={22} color="var(--naruto-yellow)" className="animate-bounce" />
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--naruto-yellow)' }}>
+                {lang === 'fr' ? '🍿 COUPON RÉCOMPENSE SNACK (100% PARFAIT) ! 🧋' : '🍿 PARENT SNACK COUPON (100% PERFECT)! 🧋'}
+              </h3>
+            </div>
+            <p style={{ fontSize: '0.95rem', color: '#FFF', fontWeight: 700 }}>
+              {lang === 'fr' 
+                ? 'Score parfait de 0 faute ! Montre cet écran à tes parents pour réclamer ton snack préféré ! 🍕🍩' 
+                : 'Zero mistakes! Show this screen to your parents to claim your favorite snack reward! 🍕🍩'}
+            </p>
           </div>
-          <p style={{ fontSize: '0.95rem', color: '#FFF', fontWeight: 700 }}>
-            {lang === 'fr' 
-              ? 'Félicitations ! Montre cet écran à tes parents pour réclamer ton snack/gâterie préféré ! 🍕🍩' 
-              : 'Congrats! Show this screen to your parents to claim your favorite snack reward! 🍕🍩'}
-          </p>
-        </div>
+        ) : (
+          <div style={{ marginBottom: '1.2rem', padding: '0.8rem', background: 'rgba(28, 19, 14, 0.6)', borderRadius: '8px', border: '1px solid var(--border)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+            💡 {lang === 'fr' ? 'Fais 100% sans aucune erreur pour débloquer le Coupon Snack Parent !' : 'Get 100% with zero mistakes to unlock the Parent Snack Coupon!'}
+          </div>
+        )}
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '1.5rem' }}>
           <div style={{ background: 'var(--bg-card-hover)', padding: '1rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>

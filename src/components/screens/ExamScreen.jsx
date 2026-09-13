@@ -77,7 +77,7 @@ export const ExamScreen = () => {
       correct: correctCount,
       total,
       percent,
-      passed: percent >= 80
+      passed: correctCount === total // Requires 100% score (0 mistakes) to unlock snack coupon
     });
   };
 
