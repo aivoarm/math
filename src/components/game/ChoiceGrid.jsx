@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CHOICE_EMOJIS = ["🎤", "🎸", "🎧", "🎹"];
+const NINJA_EMOJIS = ["🌀", "🍃", "🗡️", "🍥"];
 
 export const ChoiceGrid = ({ choices, selectedChoice, isCorrect, correctAnswer, onSelect }) => {
   return (
@@ -8,9 +8,9 @@ export const ChoiceGrid = ({ choices, selectedChoice, isCorrect, correctAnswer, 
       {choices.map((choice, idx) => {
         const isSelected = selectedChoice === choice;
         const isThisCorrectAnswer = choice === correctAnswer;
-        const emoji = CHOICE_EMOJIS[idx % CHOICE_EMOJIS.length];
+        const emoji = NINJA_EMOJIS[idx % NINJA_EMOJIS.length];
         
-        let background = 'rgba(20, 14, 45, 0.85)';
+        let background = 'rgba(28, 19, 14, 0.9)';
         let borderColor = 'var(--border)';
         let textColor = 'var(--text)';
         let transform = 'none';
@@ -18,19 +18,19 @@ export const ChoiceGrid = ({ choices, selectedChoice, isCorrect, correctAnswer, 
         if (selectedChoice !== null) {
           if (isSelected) {
             if (isCorrect) {
-              background = 'var(--kpop-mint-glow)';
-              borderColor = 'var(--kpop-mint)';
-              textColor = 'var(--kpop-mint)';
+              background = 'var(--naruto-blue-glow)';
+              borderColor = 'var(--naruto-blue)';
+              textColor = 'var(--naruto-blue)';
               transform = 'scale(1.05)';
             } else {
-              background = 'rgba(255, 0, 122, 0.25)';
-              borderColor = 'var(--kpop-pink)';
-              textColor = '#FF66B2';
+              background = 'rgba(230, 57, 70, 0.25)';
+              borderColor = 'var(--naruto-red)';
+              textColor = '#FF6B6B';
             }
           } else if (isThisCorrectAnswer) {
-            background = 'var(--kpop-mint-glow)';
-            borderColor = 'var(--kpop-mint)';
-            textColor = 'var(--kpop-mint)';
+            background = 'var(--naruto-blue-glow)';
+            borderColor = 'var(--naruto-blue)';
+            textColor = 'var(--naruto-blue)';
           }
         }
 
@@ -54,13 +54,13 @@ export const ChoiceGrid = ({ choices, selectedChoice, isCorrect, correctAnswer, 
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              boxShadow: isSelected && isCorrect ? '0 0 20px var(--kpop-mint)' : '0 4px 15px rgba(0,0,0,0.3)',
+              boxShadow: isSelected && isCorrect ? '0 0 20px var(--naruto-blue)' : '0 4px 15px rgba(0,0,0,0.4)',
               opacity: selectedChoice !== null && !isSelected && !isThisCorrectAnswer ? 0.35 : 1
             }}
           >
             <span>{emoji}</span>
             <span>{choice}</span>
-            {isSelected && isCorrect && <span>🎉</span>}
+            {isSelected && isCorrect && <span>🔥</span>}
           </button>
         );
       })}
