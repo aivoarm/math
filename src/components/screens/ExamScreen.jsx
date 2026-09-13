@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { translations } from '../../lib/i18n';
 import { examData } from '../../content/exam-data';
+import { Scratchpad } from '../game/Scratchpad';
 import { Timer, RotateCcw, CheckCircle, Home, Gift, Check, X, Award } from 'lucide-react';
 
 export const ExamScreen = () => {
@@ -238,6 +239,8 @@ export const ExamScreen = () => {
                     outline: 'none'
                   }}
                 />
+
+                {!isSubmitted && <Scratchpad problemId={p.id} />}
 
                 {isSubmitted && (
                   <div style={{ fontSize: '0.8rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
