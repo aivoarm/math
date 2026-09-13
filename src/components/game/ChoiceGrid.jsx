@@ -1,31 +1,36 @@
 import React from 'react';
 
+const CHOICE_EMOJIS = ["🎤", "🎸", "🎧", "🎹"];
+
 export const ChoiceGrid = ({ choices, selectedChoice, isCorrect, correctAnswer, onSelect }) => {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '1.2rem' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '1.2rem' }}>
       {choices.map((choice, idx) => {
         const isSelected = selectedChoice === choice;
         const isThisCorrectAnswer = choice === correctAnswer;
+        const emoji = CHOICE_EMOJIS[idx % CHOICE_EMOJIS.length];
         
-        let background = 'var(--bg-card)';
+        let background = 'rgba(20, 14, 45, 0.85)';
         let borderColor = 'var(--border)';
         let textColor = 'var(--text)';
+        let transform = 'none';
 
         if (selectedChoice !== null) {
           if (isSelected) {
             if (isCorrect) {
-              background = 'var(--green-glow)';
-              borderColor = 'var(--green)';
-              textColor = 'var(--green)';
+              background = 'var(--kpop-mint-glow)';
+              borderColor = 'var(--kpop-mint)';
+              textColor = 'var(--kpop-mint)';
+              transform = 'scale(1.05)';
             } else {
-              background = 'var(--red-glow)';
-              borderColor = 'var(--red)';
-              textColor = 'var(--red)';
+              background = 'rgba(255, 0, 122, 0.25)';
+              borderColor = 'var(--kpop-pink)';
+              textColor = '#FF66B2';
             }
           } else if (isThisCorrectAnswer) {
-            background = 'var(--green-glow)';
-            borderColor = 'var(--green)';
-            textColor = 'var(--green)';
+            background = 'var(--kpop-mint-glow)';
+            borderColor = 'var(--kpop-mint)';
+            textColor = 'var(--kpop-mint)';
           }
         }
 
@@ -38,16 +43,24 @@ export const ChoiceGrid = ({ choices, selectedChoice, isCorrect, correctAnswer, 
               background,
               border: `2px solid ${borderColor}`,
               color: textColor,
-              padding: '1.2rem',
+              padding: '1.3rem 1rem',
               borderRadius: 'var(--radius)',
-              fontSize: '1.25rem',
-              fontWeight: 700,
+              fontSize: '1.35rem',
+              fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              transition: 'all 0.2s ease',
-              opacity: selectedChoice !== null && !isSelected && !isThisCorrectAnswer ? 0.4 : 1
+              transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              transform,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              boxShadow: isSelected && isCorrect ? '0 0 20px var(--kpop-mint)' : '0 4px 15px rgba(0,0,0,0.3)',
+              opacity: selectedChoice !== null && !isSelected && !isThisCorrectAnswer ? 0.35 : 1
             }}
           >
-            {choice}
+            <span>{emoji}</span>
+            <span>{choice}</span>
+            {isSelected && isCorrect && <span>🎉</span>}
           </button>
         );
       })}
