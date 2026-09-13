@@ -1,24 +1,23 @@
 :root {
-  --bg: #0D1117;
-  --bg-card: #161B22;
-  --bg-card-hover: #21262D;
-  --border: #30363D;
-  --text: #F0F6FC;
-  --text-muted: #8B949E;
+  --bg: #0A071B;
+  --bg-card: #140E2D;
+  --bg-card-hover: #1E1640;
+  --border: #3A2B68;
+  --text: #F8F5FF;
+  --text-muted: #A396C8;
   
-  --cyan: #00E5FF;
-  --cyan-glow: rgba(0, 229, 255, 0.15);
-  --purple: #7C3AED;
-  --purple-glow: rgba(124, 58, 237, 0.2);
-  --green: #10B981;
-  --green-glow: rgba(16, 185, 129, 0.15);
-  --red: #EF4444;
-  --red-glow: rgba(239, 68, 68, 0.15);
-  --amber: #F59E0B;
+  --kpop-pink: #FF007A;
+  --kpop-pink-glow: rgba(255, 0, 122, 0.25);
+  --kpop-violet: #9D00FF;
+  --kpop-violet-glow: rgba(157, 0, 255, 0.25);
+  --kpop-mint: #00FFC2;
+  --kpop-mint-glow: rgba(0, 255, 194, 0.25);
+  --kpop-gold: #FFD700;
+  --kpop-gold-glow: rgba(255, 215, 0, 0.3);
   
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', monospace;
-  --radius: 14px;
+  --radius: 16px;
 }
 
 * {
@@ -29,7 +28,7 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg);
+  background: radial-gradient(circle at 50% 0%, #200D47 0%, #0A071B 70%);
   color: var(--text);
   min-height: 100vh;
   display: flex;
@@ -57,39 +56,40 @@ button {
 }
 
 .card {
-  background: var(--bg-card);
+  background: rgba(20, 14, 45, 0.85);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(157, 0, 255, 0.15), 0 0 15px rgba(255, 0, 122, 0.08);
+  backdrop-filter: blur(16px);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--cyan) 0%, #00B0FF 100%);
-  color: #000;
-  font-weight: 700;
+  background: linear-gradient(135deg, var(--kpop-pink) 0%, var(--kpop-violet) 100%);
+  color: #FFF;
+  font-weight: 800;
   padding: 0.85rem 1.5rem;
   border-radius: var(--radius);
   font-size: 1rem;
   transition: all 0.2s ease;
-  box-shadow: 0 0 15px var(--cyan-glow);
+  box-shadow: 0 0 20px var(--kpop-pink-glow);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 30px rgba(255, 0, 122, 0.6);
 }
 
 .btn-secondary {
   background: var(--bg-card-hover);
   color: var(--text);
   border: 1px solid var(--border);
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.85rem 1.5rem;
   border-radius: var(--radius);
   font-size: 1rem;
@@ -101,8 +101,9 @@ button {
 }
 
 .btn-secondary:hover {
-  border-color: var(--cyan);
-  color: var(--cyan);
+  border-color: var(--kpop-mint);
+  color: var(--kpop-mint);
+  box-shadow: 0 0 15px var(--kpop-mint-glow);
 }
 
 .badge {
@@ -112,26 +113,45 @@ button {
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.badge-cyan {
-  background: var(--cyan-glow);
-  color: var(--cyan);
-  border: 1px solid rgba(0, 229, 255, 0.3);
+.badge-pink {
+  background: var(--kpop-pink-glow);
+  color: #FF66B2;
+  border: 1px solid rgba(255, 0, 122, 0.4);
 }
 
-.badge-purple {
-  background: var(--purple-glow);
-  color: #C084FC;
-  border: 1px solid rgba(124, 58, 237, 0.3);
+.badge-mint {
+  background: var(--kpop-mint-glow);
+  color: var(--kpop-mint);
+  border: 1px solid rgba(0, 255, 194, 0.4);
+}
+
+.badge-gold {
+  background: var(--kpop-gold-glow);
+  color: var(--kpop-gold);
+  border: 1px solid rgba(255, 215, 0, 0.5);
 }
 
 @keyframes pulseGlow {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.03); }
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
 }
 
 .pulse {
-  animation: pulseGlow 2s infinite ease-in-out;
+  animation: pulseGlow 1.8s infinite ease-in-out;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.kpop-gradient-text {
+  background: linear-gradient(90deg, #FF007A 0%, #00FFC2 50%, #FFD700 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
 }
