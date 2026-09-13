@@ -66,40 +66,7 @@ export const ProfileScreen = () => {
         </div>
       </div>
 
-      <div className="card" style={{ borderColor: 'var(--border)' }}>
-        <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.5rem' }}>{t.loginWithSupabase}</h4>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
-          Sauvegarde tes progrès en ligne sans mot de passe.
-        </p>
-
-        {sent ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--green)' }}>
-            <CheckCircle2 size={18} /> Lien magique envoyé à {email}!
-          </div>
-        ) : (
-          <form onSubmit={handleMagicLink} style={{ display: 'flex', gap: '8px' }}>
-            <input
-              type="email"
-              placeholder={t.enterEmail}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                flex: 1,
-                padding: '0.75rem',
-                borderRadius: 'var(--radius)',
-                background: 'var(--bg)',
-                border: '1px solid var(--border)',
-                color: 'var(--text)',
-                outline: 'none'
-              }}
-              required
-            />
-            <button type="submit" className="btn-primary" disabled={loading} style={{ padding: '0.75rem 1rem' }}>
-              <Mail size={16} />
-            </button>
-          </form>
-        )}
-      </div>
+      {/* Login / Subscription removed per request */}
     </div>
   );
 };
