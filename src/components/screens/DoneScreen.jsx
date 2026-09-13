@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { translations } from '../../lib/i18n';
-import { Trophy, Zap, Home, RefreshCw } from 'lucide-react';
+import { Trophy, Zap, Home, RefreshCw, Gift } from 'lucide-react';
 
 export const DoneScreen = () => {
   const { sessionScore, sessionXpGained, currentTopic, selectTopic, setScreen, lang } = useGameStore();
@@ -20,6 +20,30 @@ export const DoneScreen = () => {
         <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginBottom: '1.5rem' }}>
           {lang === 'fr' ? currentTopic.meta.titleFr : currentTopic.meta.titleEn}
         </p>
+
+        {/* Snack Reward Coupon */}
+        <div 
+          style={{ 
+            background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 0, 122, 0.2) 100%)', 
+            border: '2px dashed var(--kpop-gold)', 
+            borderRadius: 'var(--radius)', 
+            padding: '1.2rem', 
+            marginBottom: '1.5rem',
+            boxShadow: '0 0 15px var(--kpop-gold-glow)'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '0.4rem' }}>
+            <Gift size={22} color="var(--kpop-gold)" className="animate-bounce" />
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--kpop-gold)' }}>
+              {lang === 'fr' ? '🍿 COUPON RÉCOMPENSE SNACK ! 🧋' : '🍿 PARENT SNACK COUPON REWARD! 🧋'}
+            </h3>
+          </div>
+          <p style={{ fontSize: '0.95rem', color: '#FFF', fontWeight: 700 }}>
+            {lang === 'fr' 
+              ? 'Félicitations ! Montre cet écran à tes parents pour réclamer ton snack/gâterie préféré ! 🍕🍩' 
+              : 'Congrats! Show this screen to your parents to claim your favorite snack reward! 🍕🍩'}
+          </p>
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '1.5rem' }}>
           <div style={{ background: 'var(--bg-card-hover)', padding: '1rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>
