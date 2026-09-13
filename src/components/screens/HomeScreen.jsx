@@ -48,9 +48,14 @@ export const HomeScreen = () => {
         <h3 style={{ fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Scroll size={18} color="var(--naruto-orange)" /> {t.selectTopic}
         </h3>
-        <button className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }} onClick={() => setScreen('profile')}>
-          <User size={14} /> {t.profile}
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className="btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }} onClick={() => setScreen('exam')}>
+            ⏱️ Chunin Exam Space
+          </button>
+          <button className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }} onClick={() => setScreen('profile')}>
+            <User size={14} /> {t.profile}
+          </button>
+        </div>
       </div>
 
       {/* Ninja Mission Scrolls */}

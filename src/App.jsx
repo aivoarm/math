@@ -7,6 +7,7 @@ import { HomeScreen } from './components/screens/HomeScreen';
 import { GameScreen } from './components/screens/GameScreen';
 import { DoneScreen } from './components/screens/DoneScreen';
 import { ProfileScreen } from './components/screens/ProfileScreen';
+import { ExamScreen } from './components/screens/ExamScreen';
 import { Languages } from 'lucide-react';
 
 export function App() {
@@ -30,6 +31,7 @@ export function App() {
         {currentScreen === 'game' && <GameScreen />}
         {currentScreen === 'done' && <DoneScreen />}
         {currentScreen === 'profile' && <ProfileScreen />}
+        {currentScreen === 'exam' && <ExamScreen />}
       </main>
 
       {/* Footer */}
