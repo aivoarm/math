@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { translations } from '../../lib/i18n';
-import { examData } from '../../content/exam-data';
+import { examData, generatePart1Problems, generatePart2Problems } from '../../content/exam-data';
 import { Scratchpad } from '../game/Scratchpad';
-import { Timer, RotateCcw, CheckCircle, Home, Gift, Check, X, Award } from 'lucide-react';
+import { Timer, RotateCcw, CheckCircle, Home, Gift, Check, X, Award, Shuffle } from 'lucide-react';
 
 export const ExamScreen = () => {
   const { lang, setScreen } = useGameStore();
   const t = translations[lang];
 
   const [activeTab, setActiveTab] = useState('part1'); // 'part1' | 'part2'
+  const [part1Problems, setPart1Problems] = useState(() => generatePart1Problems());
+  const [part2Problems, setPart2Problems] = useState(() => generatePart2Problems());
+
   const [answers, setAnswers] = useState({});
   const [timerSeconds, setTimerSeconds] = useState(examData.part1.targetSeconds);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [scoreReport, setScoreReport] = useState(null);
 
-  const currentPart = activeTab === 'part1' ? examData.part1 : examData.part2;
+  const currentPartMeta = activeTab === 'part1' ? examData.part1 : examData.part2;
+  const currentProblems = activeTab === 'part1' ? part1Problems : part2Problems;
 
   // Timer countdown hook
   useEffect(() => {
@@ -31,14 +35,18 @@ export const ExamScreen = () => {
     return () => clearInterval(interval);
   }, [isTimerRunning, timerSeconds, isSubmitted]);
 
-  const startTimer = () => setIsTimerRunning(true);
-  const pauseTimer = () => setIsTimerRunning(false);
-
   const handleReset = () => {
+    // Generate fresh new random problems on reset!
+    if (activeTab === 'part1') {
+      setPart1Problems(generatePart1Problems());
+    } else {
+      setPart2Problems(generatePart2Problems());
+    }
+
     setAnswers({});
     setIsSubmitted(false);
     setScoreReport(null);
-    setTimerSeconds(currentPart.targetSeconds);
+    setTimerSeconds(currentPartMeta.targetSeconds);
     setIsTimerRunning(false);
   };
 
@@ -63,9 +71,9 @@ export const ExamScreen = () => {
     setIsSubmitted(true);
 
     let correctCount = 0;
-    const total = currentPart.problems.length;
+    const total = currentProblems.length;
 
-    currentPart.problems.forEach((p) => {
+    currentProblems.forEach((p) => {
       const userVal = parseInt(answers[p.id], 10);
       if (userVal === p.answer) {
         correctCount += 1;
@@ -185,14 +193,19 @@ export const ExamScreen = () => {
         </div>
       )}
 
-      {/* Exercises Grid (50 Questions total) */}
+      {/* Exercises Grid */}
       <div className="card">
-        <h4 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--naruto-orange)' }}>
-          {lang === 'fr' ? currentPart.titleFr : currentPart.titleEn} ({currentPart.problems.length} exercices)
-        </h4>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--naruto-orange)' }}>
+            {lang === 'fr' ? currentPartMeta.titleFr : currentPartMeta.titleEn} ({currentProblems.length} exercices)
+          </h4>
+          <button className="btn-secondary" style={{ padding: '0.35rem 0.7rem', fontSize: '0.75rem' }} onClick={handleReset}>
+            <Shuffle size={12} /> Nouvelles Questions
+          </button>
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '12px' }}>
-          {currentPart.problems.map((p) => {
+          {currentProblems.map((p, idx) => {
             const userVal = answers[p.id] || '';
             const isCorrect = isSubmitted && parseInt(userVal, 10) === p.answer;
             const isWrong = isSubmitted && parseInt(userVal, 10) !== p.answer;
