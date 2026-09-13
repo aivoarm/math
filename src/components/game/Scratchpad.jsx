@@ -65,14 +65,30 @@ export const Scratchpad = ({ problemId }) => {
     }
   };
 
+  const getCanvasCoords = (e) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
   const startDrawing = (e) => {
     setIsDrawing(true);
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
+    const coords = getCanvasCoords(e);
     ctx.beginPath();
-    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.moveTo(coords.x, coords.y);
   };
 
   const draw = (e) => {
@@ -80,11 +96,12 @@ export const Scratchpad = ({ problemId }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
+    const coords = getCanvasCoords(e);
     ctx.strokeStyle = '#FF6B00';
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 3;
     ctx.lineCap = 'round';
-    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.lineJoin = 'round';
+    ctx.lineTo(coords.x, coords.y);
     ctx.stroke();
   };
 
@@ -360,15 +377,18 @@ export const Scratchpad = ({ problemId }) => {
 
           {/* Freehand canvas for writing/drawing */}
           {activeTab === 'canvas' && (
-            <div style={{ position: 'relative', width: '100%', height: '140px', background: '#000', borderRadius: '6px', overflow: 'hidden' }}>
+            <div style={{ position: 'relative', width: '100%', height: '180px', background: '#000', borderRadius: '6px', overflow: 'hidden' }}>
               <canvas
                 ref={canvasRef}
-                width={260}
-                height={140}
+                width={600}
+                height={180}
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}
                 onMouseLeave={stopDrawing}
+                onTouchStart={startDrawing}
+                onTouchMove={draw}
+                onTouchEnd={stopDrawing}
                 style={{ cursor: 'crosshair', width: '100%', height: '100%', touchAction: 'none' }}
               />
             </div>
