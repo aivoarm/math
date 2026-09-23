@@ -60,14 +60,16 @@ export const ReflexesScreen = () => {
   const startNextTurn = (prevAnswer = null) => {
     let fact = getNextFact();
     
+    // Chain mode logic: if prevAnswer exists, cap prevAnswer to reasonable range or pick clean factor
     if (prevAnswer !== null && selectedSet === 'times_tables') {
-      const b = Math.floor(Math.random() * 12) + 12;
+      const cleanA = prevAnswer > 30 ? (Math.floor(Math.random() * 14) + 12) : prevAnswer;
+      const b = Math.floor(Math.random() * 14) + 12; // 12 to 25
       fact = {
-        id: `chain_${prevAnswer}x${b}`,
-        qDisplay: `${prevAnswer} × ${b}`,
-        a: prevAnswer,
+        id: `chain_${cleanA}x${b}`,
+        qDisplay: `${cleanA} × ${b}`,
+        a: cleanA,
         b: b,
-        answer: prevAnswer * b,
+        answer: cleanA * b,
         category: 'times_tables'
       };
     }
