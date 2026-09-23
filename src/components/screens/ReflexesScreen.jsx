@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { translations } from '../../lib/i18n';
 import { reflexFactSets, generateReflexChoices } from '../../content/reflexes-facts';
-import { Zap, Clock, Flame, ShieldAlert, Award, Home, RotateCcw, ArrowRight } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import { Zap, Clock, Flame, ShieldAlert, Award, Home, RotateCcw, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export const ReflexesScreen = () => {
-  const { lang, setScreen, xp, streak, recordFactResult, reflexesStats } = useGameStore();
+  const { lang, setScreen, recordFactResult, reflexesStats } = useGameStore();
   const t = translations[lang];
 
   // Config state
@@ -24,20 +25,30 @@ export const ReflexesScreen = () => {
   const [sessionXp, setSessionXp] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
-  const [chainQuestion, setChainQuestion] = useState(null); // Chain mode: answer feeds next
 
   const timerRef = useRef(null);
+
+  const triggerFireworks = () => {
+    try {
+      confetti({
+        particleCount: 80,
+        spread: 90,
+        origin: { y: 0.5 },
+        colors: ['#10B981', '#FF6B00', '#FFD200', '#A855F7']
+      });
+    } catch (e) {
+      // fallback
+    }
+  };
 
   // Select next fact using Spaced Repetition weights
   const getNextFact = () => {
     const factSet = reflexFactSets[selectedSet];
-    // Generate 3 candidate facts and pick the one with highest miss rate or oldest lastSeen
     const candidates = [factSet.generate(), factSet.generate(), factSet.generate()];
     
     candidates.sort((a, b) => {
       const statsA = reflexesStats[a.id] || { misses: 0, lastSeen: 0 };
       const statsB = reflexesStats[b.id] || { misses: 0, lastSeen: 0 };
-      // Weight score: high misses + older time
       const scoreA = (statsA.misses * 10) + ((Date.now() - statsA.lastSeen) / 100000);
       const scoreB = (statsB.misses * 10) + ((Date.now() - statsB.lastSeen) / 100000);
       return scoreB - scoreA;
@@ -49,9 +60,8 @@ export const ReflexesScreen = () => {
   const startNextTurn = (prevAnswer = null) => {
     let fact = getNextFact();
     
-    // Chain mode logic: if prevAnswer exists, adapt next question around it if possible
     if (prevAnswer !== null && selectedSet === 'times_tables') {
-      const b = Math.floor(Math.random() * 12) + 1;
+      const b = Math.floor(Math.random() * 12) + 12;
       fact = {
         id: `chain_${prevAnswer}x${b}`,
         qDisplay: `${prevAnswer} × ${b}`,
@@ -119,8 +129,8 @@ export const ReflexesScreen = () => {
     }
 
     if (correct) {
+      triggerFireworks();
       const newStreak = sessionStreak + 1;
-      // Streak Multiplier bonus XP calculation: Base 10 XP + multiplier
       const streakBonus = Math.min(newStreak, 5);
       const earnedXp = 10 * streakBonus;
 
@@ -249,22 +259,37 @@ export const ReflexesScreen = () => {
             />
           </div>
 
-          {/* Question Display Card */}
+          {/* Question Display Card & Reinforcement Flash */}
           <div 
             className="card" 
             style={{ 
               textAlign: 'center', 
-              padding: '2.5rem 1rem', 
+              padding: '2rem 1rem', 
               borderColor: selectedChoice !== null ? (isCorrect ? '#10B981' : '#EF4444') : 'var(--naruto-orange)',
-              boxShadow: selectedChoice !== null ? (isCorrect ? '0 0 25px rgba(16,185,129,0.4)' : '0 0 25px rgba(239,68,68,0.4)') : '0 0 20px var(--naruto-orange-glow)'
+              boxShadow: selectedChoice !== null ? (isCorrect ? '0 0 35px rgba(16,185,129,0.6)' : '0 0 25px rgba(239,68,68,0.5)') : '0 0 20px var(--naruto-orange-glow)',
+              transition: 'all 0.3s ease'
             }}
           >
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', tracking: '0.1em', fontWeight: 800 }}>
               Fact Instantané • {timerDuration}s
             </span>
-            <h1 style={{ fontSize: '3.5rem', fontWeight: 900, color: '#FFF', margin: '0.8rem 0', fontFamily: 'var(--font-mono)' }}>
-              {questionData.questionText}
-            </h1>
+
+            {/* Prompt vs Reinforcement Statement */}
+            {selectedChoice !== null && isCorrect ? (
+              <div style={{ padding: '0.5rem 0', animation: 'chakraPulse 0.8s ease-in-out' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: '#10B981', fontWeight: 900, fontSize: '1.2rem', textTransform: 'uppercase' }}>
+                  <Sparkles size={20} /> RETIEN BIEN CE FACT ! <CheckCircle2 size={20} />
+                </div>
+                <h1 style={{ fontSize: '3rem', fontWeight: 900, color: '#10B981', margin: '0.6rem 0', fontFamily: 'var(--font-mono)', textShadow: '0 0 20px rgba(16,185,129,0.5)' }}>
+                  {questionData.questionText.replace(' = ?', '').replace('?', questionData.correctAnswer)} = {questionData.correctAnswer}
+                </h1>
+              </div>
+            ) : (
+              <h1 style={{ fontSize: '3.2rem', fontWeight: 900, color: '#FFF', margin: '0.8rem 0', fontFamily: 'var(--font-mono)' }}>
+                {questionData.questionText}
+              </h1>
+            )}
+
             {selectedChoice === 'TIMEOUT' && (
               <span style={{ color: '#EF4444', fontWeight: 800, fontSize: '1.1rem' }}>
                 ⏰ TEMPS ÉCOULÉ ! Réponse : {questionData.correctAnswer}
