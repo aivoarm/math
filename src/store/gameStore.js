@@ -123,5 +123,41 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  // Spaced Repetition & Miss Tracker state
+  // Map of factId -> { attempts: number, misses: number, lastSeen: timestamp }
+  reflexesStats: JSON.parse(localStorage.getItem('mathquete_reflexes_stats') || '{}'),
+
+  // Record fact result into Spaced Repetition tracker and sync to Supabase table `reflexes_stats`
+  recordFactResult: async (factId, isCorrect) => {
+    const { reflexesStats } = get();
+    const existing = reflexesStats[factId] || { attempts: 0, misses: 0, lastSeen: 0 };
+    const updated = {
+      attempts: existing.attempts + 1,
+      misses: isCorrect ? existing.misses : existing.misses + 1,
+      lastSeen: Date.now()
+    };
+    const newStats = { ...reflexesStats, [factId]: updated };
+    localStorage.setItem('mathquete_reflexes_stats', JSON.stringify(newStats));
+    set({ reflexesStats: newStats });
+
+    if (supabase) {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from('reflexes_stats').upsert({
+            user_id: user.id,
+            fact_id: factId,
+            attempts: updated.attempts,
+            miss_count: updated.misses,
+            last_seen: new Date().toISOString()
+          });
+        }
+      } catch (err) {
+        console.warn('Supabase reflexes log error:', err);
+      }
+    }
+  },
+
   getAllTopics: () => TOPICS
 }));
+
