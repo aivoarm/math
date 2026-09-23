@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../../store/gameStore';
+import { fireConfetti } from '../../lib/confetti';
 import { Home, Zap, RotateCcw } from 'lucide-react';
 
 export const RunnerScreen = () => {
   const { setScreen } = useGameStore();
 
   const [question, setQuestion] = useState({ qText: '7 × 8', choices: [54, 56, 64], answer: 56 });
-  const [activeLane, setActiveLane] = useState(1); // 0 = Left, 1 = Center, 2 = Right
+  const [activeLane, setActiveLane] = useState(1);
   const [score, setScore] = useState(0);
   const [speed, setSpeed] = useState(1);
   const [isGameOver, setIsGameOver] = useState(false);
 
   const generateQuestion = () => {
-    const a = Math.floor(Math.random() * 14) + 11; // 11 to 24
-    const b = Math.floor(Math.random() * 14) + 11; // 11 to 24
+    const a = Math.floor(Math.random() * 14) + 11;
+    const b = Math.floor(Math.random() * 14) + 11;
     const ans = a * b;
     const fakes = [ans - (Math.floor(Math.random() * 8) + 4), ans + (Math.floor(Math.random() * 12) + 6)].sort(() => Math.random() - 0.5);
     const choices = [ans, fakes[0], fakes[1]].sort(() => Math.random() - 0.5);
@@ -28,6 +29,7 @@ export const RunnerScreen = () => {
   const handlePassGate = () => {
     const selectedAnswer = question.choices[activeLane];
     if (selectedAnswer === question.answer) {
+      fireConfetti();
       setScore((s) => s + 1);
       useGameStore.setState((s) => ({ xp: s.xp + 15 }));
       generateQuestion();

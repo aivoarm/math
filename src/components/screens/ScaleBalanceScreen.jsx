@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
+import { fireConfetti } from '../../lib/confetti';
 import { Home, Scale, CheckCircle2, RotateCcw } from 'lucide-react';
 
 export const ScaleBalanceScreen = () => {
   const { setScreen } = useGameStore();
 
-  // Problem: 2x + 6 = 20 -> x = 7
   const [a, setA] = useState(2);
   const [b, setB] = useState(6);
   const [rightVal, setRightVal] = useState(20);
@@ -14,9 +14,9 @@ export const ScaleBalanceScreen = () => {
   const [score, setScore] = useState(0);
 
   const generatePuzzle = () => {
-    const coeff = Math.floor(Math.random() * 4) + 2; // 2..5
-    const targetX = Math.floor(Math.random() * 8) + 1; // 1..8
-    const constant = Math.floor(Math.random() * 10) + 1; // 1..10
+    const coeff = Math.floor(Math.random() * 4) + 2;
+    const targetX = Math.floor(Math.random() * 8) + 1;
+    const constant = Math.floor(Math.random() * 10) + 1;
     const right = coeff * targetX + constant;
 
     setA(coeff);
@@ -31,6 +31,7 @@ export const ScaleBalanceScreen = () => {
 
   const handleCheck = () => {
     if (isMatch) {
+      fireConfetti();
       setIsBalanced(true);
       setScore((s) => s + 1);
       useGameStore.setState((s) => ({ xp: s.xp + 20 }));

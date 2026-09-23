@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { translations } from '../../lib/i18n';
+import { fireConfetti } from '../../lib/confetti';
 import { Home, Target, RotateCcw, Flame } from 'lucide-react';
 
 export const TargetRushScreen = () => {
@@ -79,6 +80,7 @@ export const TargetRushScreen = () => {
     setOrbs((prev) => prev.filter((o) => o.id !== orb.id));
 
     if (isCorrect) {
+      fireConfetti();
       setScore((s) => s + 1);
     } else {
       setMisses((m) => m + 1);

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
+import { fireConfetti } from '../../lib/confetti';
 import { Home, Sparkles, RotateCcw } from 'lucide-react';
 
 export const WordleMathScreen = () => {
   const { setScreen } = useGameStore();
 
-  // Hidden Equation e.g. "8+4=12" (6 characters)
   const [targetEq, setTargetEq] = useState('8+4=12');
-  const [guesses, setGuesses] = useState([]); // Array of 6-letter strings
+  const [guesses, setGuesses] = useState([]);
   const [currentGuess, setCurrentGuess] = useState('');
   const [isGameOver, setIsGameOver] = useState(false);
   const [won, setWon] = useState(false);
@@ -32,6 +32,7 @@ export const WordleMathScreen = () => {
     setCurrentGuess('');
 
     if (currentGuess === targetEq) {
+      fireConfetti();
       setWon(true);
       setIsGameOver(true);
       useGameStore.setState((s) => ({ xp: s.xp + 50 }));

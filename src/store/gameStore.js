@@ -4,6 +4,7 @@ import * as integers from '../content/sec1/integers.js';
 import * as fractions from '../content/sec1/fractions.js';
 import * as geometry from '../content/sec1/geometry.js';
 import { supabase } from '../lib/supabase.js';
+import { fireConfetti } from '../lib/confetti.js';
 
 const TOPICS = [mentalMath, integers, fractions, geometry];
 
@@ -12,7 +13,7 @@ export const useGameStore = create((set, get) => ({
   xp: 120,
   level: 2,
   streak: 3,
-  currentScreen: 'home', // 'home' | 'game' | 'done' | 'profile'
+  currentScreen: 'home',
   currentTopic: mentalMath,
   currentProblemIndex: 0,
   selectedChoice: null,
@@ -48,6 +49,10 @@ export const useGameStore = create((set, get) => ({
     const problem = currentTopic.problems[currentProblemIndex];
     const correct = choice === problem.answer;
     const addedXp = correct ? currentTopic.meta.xpPerProblem : 0;
+
+    if (correct) {
+      fireConfetti();
+    }
 
     const newXp = xp + addedXp;
     const newLevel = Math.floor(newXp / 100) + 1;

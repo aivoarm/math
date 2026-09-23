@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../../store/gameStore';
+import { fireConfetti } from '../../lib/confetti';
 import { Home, Layers, RotateCcw } from 'lucide-react';
 
 export const CascadeScreen = () => {
@@ -51,6 +52,7 @@ export const CascadeScreen = () => {
 
     if (nextSum === targetVal) {
       // EXACT HIT!
+      fireConfetti();
       setScore((s) => s + 1);
       setTimeout(startNewRound, 600);
     } else if (nextSum > targetVal) {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
+import { fireConfetti } from '../../lib/confetti';
 import { Home, Compass, RotateCcw, Trophy, AlertCircle } from 'lucide-react';
 
 export const PathfinderScreen = () => {
@@ -14,7 +15,6 @@ export const PathfinderScreen = () => {
 
   // Generate a procedural 4x4 Grid of Math Expressions with a guaranteed valid path
   const generateNewMaze = () => {
-    // Generate expressions with increasing values along at least one valid path
     const newGrid = [
       [
         { expr: '3 × 4', val: 12 },
@@ -49,7 +49,6 @@ export const PathfinderScreen = () => {
     setIsWon(false);
   };
 
-  // Initialize maze on component mount
   React.useEffect(() => {
     generateNewMaze();
   }, []);
@@ -57,28 +56,25 @@ export const PathfinderScreen = () => {
   const handleTileClick = (r, c) => {
     if (isGameOver || isWon || grid.length === 0) return;
 
-    // Check adjacency (Up, Down, Left, Right)
     const isAdjacent = Math.abs(r - currentPos.row) + Math.abs(c - currentPos.col) === 1;
     if (!isAdjacent) return;
 
     const currentVal = grid[currentPos.row][currentPos.col].val;
     const targetVal = grid[r][c].val;
 
-    // Rule: Target expression value MUST be strictly greater than current tile
     if (targetVal > currentVal) {
       const nextVisited = [...visited, `${r},${c}`];
       setCurrentPos({ row: r, col: c });
       setVisited(nextVisited);
 
-      // Check if reached EXIT (Bottom-Right corner tile 3,3)
       if (r === 3 && c === 3) {
+        fireConfetti();
         setIsWon(true);
         const earned = 60;
         setXpGained(earned);
         useGameStore.setState((s) => ({ xp: s.xp + earned }));
       }
     } else {
-      // WRONG STEP (Target value was not greater) -> Trap Triggered!
       setIsGameOver(true);
     }
   };
