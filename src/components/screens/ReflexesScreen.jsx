@@ -131,7 +131,7 @@ export const ReflexesScreen = () => {
     }
 
     if (correct) {
-      triggerFireworks();
+      useGameStore.getState().triggerCelebration(questionData.fullStatement);
       const newStreak = sessionStreak + 1;
       const streakBonus = Math.min(newStreak, 5);
       const earnedXp = 10 * streakBonus;

@@ -3,6 +3,7 @@ import { useGameStore } from './store/gameStore';
 import { translations } from './lib/i18n';
 import { XPBar } from './components/ui/XPBar';
 import { StreakBadge } from './components/ui/StreakBadge';
+import { CelebrationModal } from './components/ui/CelebrationModal';
 import { HomeScreen } from './components/screens/HomeScreen';
 import { GameScreen } from './components/screens/GameScreen';
 import { DoneScreen } from './components/screens/DoneScreen';
@@ -23,6 +24,9 @@ export function App() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%' }}>
+      {/* Fullscreen Confetti Celebration Modal */}
+      <CelebrationModal />
+
       {/* Mobile Top Navigation Header */}
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.8rem', paddingBottom: '0.6rem', borderBottom: '1px solid var(--border)' }}>
         <XPBar />

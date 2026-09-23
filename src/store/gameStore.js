@@ -23,7 +23,13 @@ export const useGameStore = create((set, get) => ({
   sessionXpGained: 0,
   aiHint: null,
   isAiLoading: false,
-  masteryData: {},
+  celebrateFact: null, // { title: string, statement: string } | null
+  triggerCelebration: (statement, title = 'RETIEN BIEN CE FACT !') => {
+    fireConfetti();
+    set({ celebrateFact: { statement, title } });
+  },
+  dismissCelebration: () => set({ celebrateFact: null }),
+
 
   toggleLang: () => set((state) => ({ lang: state.lang === 'fr' ? 'en' : 'fr' })),
 
