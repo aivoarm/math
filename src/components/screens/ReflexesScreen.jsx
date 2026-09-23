@@ -149,7 +149,7 @@ export const ReflexesScreen = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', minHeight: 'calc(100vh - 120px)' }}>
       {/* Header Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <button 
@@ -236,7 +236,7 @@ export const ReflexesScreen = () => {
 
       {/* Active Reflex Gameplay Screen */}
       {isPlaying && questionData && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1, justifyContent: 'space-between' }}>
           {/* Progress & Multiplier Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.3)', padding: '0.6rem 1rem', borderRadius: '10px', border: '1px solid var(--border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--naruto-orange)', fontWeight: 800 }}>
@@ -259,40 +259,45 @@ export const ReflexesScreen = () => {
             />
           </div>
 
-          {/* Question Display Card & Reinforcement Flash */}
+          {/* Question Display Card & High Impact Reinforcement Statement */}
           <div 
             className="card" 
             style={{ 
               textAlign: 'center', 
-              padding: '2rem 1rem', 
+              padding: '2.5rem 1rem', 
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
               borderColor: selectedChoice !== null ? (isCorrect ? '#10B981' : '#EF4444') : 'var(--naruto-orange)',
-              boxShadow: selectedChoice !== null ? (isCorrect ? '0 0 35px rgba(16,185,129,0.6)' : '0 0 25px rgba(239,68,68,0.5)') : '0 0 20px var(--naruto-orange-glow)',
-              transition: 'all 0.3s ease'
+              boxShadow: selectedChoice !== null ? (isCorrect ? '0 0 45px rgba(16,185,129,0.7)' : '0 0 30px rgba(239,68,68,0.6)') : '0 0 20px var(--naruto-orange-glow)',
+              transition: 'all 0.25s ease'
             }}
           >
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', tracking: '0.1em', fontWeight: 800 }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', tracking: '0.1em', fontWeight: 800, marginBottom: '0.5rem' }}>
               Fact Instantané • {timerDuration}s
             </span>
 
-            {/* Prompt vs Reinforcement Statement */}
+            {/* Prompt vs 100% Accurate Reinforcement Statement */}
             {selectedChoice !== null && isCorrect ? (
-              <div style={{ padding: '0.5rem 0', animation: 'chakraPulse 0.8s ease-in-out' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: '#10B981', fontWeight: 900, fontSize: '1.2rem', textTransform: 'uppercase' }}>
-                  <Sparkles size={20} /> RETIEN BIEN CE FACT ! <CheckCircle2 size={20} />
+              <div style={{ padding: '0.5rem 0', width: '100%', animation: 'chakraPulse 0.6s ease-in-out' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#10B981', fontWeight: 900, fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  <Sparkles size={22} /> RETIEN BIEN CE FACT ! <CheckCircle2 size={22} />
                 </div>
-                <h1 style={{ fontSize: '3rem', fontWeight: 900, color: '#10B981', margin: '0.6rem 0', fontFamily: 'var(--font-mono)', textShadow: '0 0 20px rgba(16,185,129,0.5)' }}>
-                  {questionData.questionText.replace(' = ?', '').replace('?', questionData.correctAnswer)} = {questionData.correctAnswer}
+                <h1 style={{ fontSize: '3.4rem', fontWeight: 900, color: '#10B981', margin: '1rem 0', fontFamily: 'var(--font-mono)', textShadow: '0 0 30px rgba(16,185,129,0.8)' }}>
+                  {questionData.fullStatement}
                 </h1>
               </div>
             ) : (
-              <h1 style={{ fontSize: '3.2rem', fontWeight: 900, color: '#FFF', margin: '0.8rem 0', fontFamily: 'var(--font-mono)' }}>
+              <h1 style={{ fontSize: '3.6rem', fontWeight: 900, color: '#FFF', margin: '0.8rem 0', fontFamily: 'var(--font-mono)' }}>
                 {questionData.questionText}
               </h1>
             )}
 
             {selectedChoice === 'TIMEOUT' && (
               <span style={{ color: '#EF4444', fontWeight: 800, fontSize: '1.1rem' }}>
-                ⏰ TEMPS ÉCOULÉ ! Réponse : {questionData.correctAnswer}
+                ⏰ TEMPS ÉCOULÉ ! {questionData.fullStatement}
               </span>
             )}
           </div>

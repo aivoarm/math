@@ -105,19 +105,30 @@ export const reflexFactSets = {
  * Generate choices around the correct answer for reflex mode
  */
 export function generateReflexChoices(fact, allowReverse = false) {
-  const isReverse = allowReverse && Math.random() < 0.3 && fact.a && fact.b;
+  const isReverse = allowReverse && Math.random() < 0.35 && fact.a && fact.b;
   let qText = fact.qDisplay;
   let correctAnswer = fact.answer;
+  let fullStatement = `${fact.a} × ${fact.b} = ${fact.answer}`;
 
   if (isReverse) {
     const showAFirst = Math.random() < 0.5;
     if (showAFirst) {
       qText = `? × ${fact.b} = ${fact.answer}`;
       correctAnswer = fact.a;
+      fullStatement = `${fact.a} × ${fact.b} = ${fact.answer}`;
     } else {
       qText = `${fact.a} × ? = ${fact.answer}`;
       correctAnswer = fact.b;
+      fullStatement = `${fact.a} × ${fact.b} = ${fact.answer}`;
     }
+  } else if (fact.category === 'squares') {
+    fullStatement = `${fact.n}² = ${fact.answer}`;
+  } else if (fact.category === 'cubes') {
+    fullStatement = `${fact.n}³ = ${fact.answer}`;
+  } else if (fact.category === 'powers_of_2') {
+    fullStatement = `2^${fact.p} = ${fact.answer}`;
+  } else if (fact.category === 'fractions_decimals') {
+    fullStatement = `${fact.qDisplay.replace(' = ?', '')} = ${fact.answer}`;
   }
 
   const choices = new Set([correctAnswer]);
@@ -141,6 +152,7 @@ export function generateReflexChoices(fact, allowReverse = false) {
   return {
     questionText: qText,
     correctAnswer,
+    fullStatement,
     choices: Array.from(choices).sort(() => Math.random() - 0.5)
   };
 }
