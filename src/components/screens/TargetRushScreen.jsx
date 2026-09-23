@@ -80,7 +80,7 @@ export const TargetRushScreen = () => {
     setOrbs((prev) => prev.filter((o) => o.id !== orb.id));
 
     if (isCorrect) {
-      fireConfetti();
+      useGameStore.getState().triggerCelebration(`${orb.val} ✅ (${rule.titleFr || rule.titleEn})`);
       setScore((s) => s + 1);
     } else {
       setMisses((m) => m + 1);

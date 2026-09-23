@@ -31,7 +31,7 @@ export const ScaleBalanceScreen = () => {
 
   const handleCheck = () => {
     if (isMatch) {
-      fireConfetti();
+      useGameStore.getState().triggerCelebration(`${a} × ${userX} + ${b} = ${rightVal} (x = ${userX})`);
       setIsBalanced(true);
       setScore((s) => s + 1);
       useGameStore.setState((s) => ({ xp: s.xp + 20 }));

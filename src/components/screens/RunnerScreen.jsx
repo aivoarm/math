@@ -29,7 +29,7 @@ export const RunnerScreen = () => {
   const handlePassGate = () => {
     const selectedAnswer = question.choices[activeLane];
     if (selectedAnswer === question.answer) {
-      fireConfetti();
+      useGameStore.getState().triggerCelebration(`${question.qText} = ${question.answer}`);
       setScore((s) => s + 1);
       useGameStore.setState((s) => ({ xp: s.xp + 15 }));
       generateQuestion();

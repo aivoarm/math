@@ -103,8 +103,11 @@ export const MemoryScreen = () => {
         setMatchedPairIds(newMatched);
         setFlippedIndices([]);
 
-        // Record correct match to Spaced Repetition
+        // Record correct match to Spaced Repetition & trigger celebration overlay
         recordFactResult(card1.pairId, true);
+        const exprCard = card1.type === 'expr' ? card1 : card2;
+        const ansCard = card1.type === 'ans' ? card1 : card2;
+        useGameStore.getState().triggerCelebration(`${exprCard.text} = ${ansCard.text}`);
 
         // Check Victory
         if (newMatched.length === pairCount) {

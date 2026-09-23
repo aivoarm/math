@@ -32,7 +32,7 @@ export const WordleMathScreen = () => {
     setCurrentGuess('');
 
     if (currentGuess === targetEq) {
-      fireConfetti();
+      useGameStore.getState().triggerCelebration(`ÉQUATION TROUVÉE : ${targetEq}`);
       setWon(true);
       setIsGameOver(true);
       useGameStore.setState((s) => ({ xp: s.xp + 50 }));

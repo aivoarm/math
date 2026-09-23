@@ -52,7 +52,7 @@ export const CascadeScreen = () => {
 
     if (nextSum === targetVal) {
       // EXACT HIT!
-      fireConfetti();
+      useGameStore.getState().triggerCelebration(`${targetVal} ATTEINT ! 🎉`);
       setScore((s) => s + 1);
       setTimeout(startNewRound, 600);
     } else if (nextSum > targetVal) {
