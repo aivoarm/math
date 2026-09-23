@@ -8,13 +8,40 @@ import { fireConfetti } from '../lib/confetti.js';
 
 const TOPICS = [mentalMath, integers, fractions, geometry];
 
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function prepareTopic(topicObj) {
+  if (!topicObj || !topicObj.problems) return topicObj;
+  const shuffledProblems = shuffleArray(topicObj.problems).map((prob) => {
+    if (prob.choices && Array.isArray(prob.choices)) {
+      return {
+        ...prob,
+        choices: shuffleArray(prob.choices)
+      };
+    }
+    return { ...prob };
+  });
+
+  return {
+    ...topicObj,
+    problems: shuffledProblems
+  };
+}
+
 export const useGameStore = create((set, get) => ({
   lang: 'fr',
   xp: 120,
   level: 2,
   streak: 3,
   currentScreen: 'home',
-  currentTopic: mentalMath,
+  currentTopic: prepareTopic(mentalMath),
   currentProblemIndex: 0,
   selectedChoice: null,
   isCorrect: null,
@@ -38,7 +65,7 @@ export const useGameStore = create((set, get) => ({
   selectTopic: (topicId) => {
     const found = TOPICS.find((t) => t.meta.id === topicId) || mentalMath;
     set({
-      currentTopic: found,
+      currentTopic: prepareTopic(found),
       currentProblemIndex: 0,
       selectedChoice: null,
       isCorrect: null,
